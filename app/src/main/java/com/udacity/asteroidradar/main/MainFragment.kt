@@ -5,6 +5,7 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.udacity.asteroidradar.R
+import com.udacity.asteroidradar.api.AsteroidFilter
 import com.udacity.asteroidradar.databinding.FragmentMainBinding
 import timber.log.Timber
 
@@ -21,6 +22,8 @@ class MainFragment : Fragment() {
 
         binding.viewModel = viewModel
 
+        binding.asteroidRecycler.adapter = MainAsteroidAdapter()
+
         setHasOptionsMenu(true)
         Timber.i("OnCreateView mainFragment")
 
@@ -33,6 +36,13 @@ class MainFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        viewModel.updateFilter(
+            when(item.itemId){
+                R.id.show_saved_menu -> AsteroidFilter.SHOW_SAVE
+                R.id.show_today_menu -> AsteroidFilter.SHOW_TODAY
+                else -> AsteroidFilter.SHOW_WEEK
+            }
+        )
         return true
     }
 }

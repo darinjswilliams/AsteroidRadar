@@ -5,9 +5,9 @@
         android:id="@+id/show_all_menu"
         android:title="@string/next_week_asteroids" />
     <item
-        android:id="@+id/show_rent_menu"
+        android:id="@+id/show_today_menu"
         android:title="@string/today_asteroids" />
     <item
-        android:id="@+id/show_buy_menu"
+        android:id="@+id/show_saved_menu"
         android:title="@string/saved_asteroids" />
 </menu>

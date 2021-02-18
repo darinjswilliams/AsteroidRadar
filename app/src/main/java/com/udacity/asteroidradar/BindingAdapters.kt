@@ -3,6 +3,17 @@ package com.udacity.asteroidradar
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import androidx.recyclerview.widget.RecyclerView
+import com.udacity.asteroidradar.main.MainAsteroidAdapter
+
+/* When there is no Mars property data (data is null), hide the [RecyclerView], otherwise show it.
+*/
+@BindingAdapter("listData")
+fun bindRecyclerView(recyclerView: RecyclerView, data: List<Asteroid>?) {
+    val adapter = recyclerView.adapter as MainAsteroidAdapter
+    adapter.submitList(data)
+}
+
 
 @BindingAdapter("statusIcon")
 fun bindAsteroidStatusImage(imageView: ImageView, isHazardous: Boolean) {
