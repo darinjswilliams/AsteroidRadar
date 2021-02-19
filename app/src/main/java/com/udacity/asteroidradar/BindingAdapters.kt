@@ -1,5 +1,6 @@
 package com.udacity.asteroidradar
 
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
@@ -14,13 +15,16 @@ fun bindRecyclerView(recyclerView: RecyclerView, data: List<Asteroid>?) {
     adapter.submitList(data)
 }
 
-
 @BindingAdapter("statusIcon")
 fun bindAsteroidStatusImage(imageView: ImageView, isHazardous: Boolean) {
     if (isHazardous) {
+        imageView.visibility = View.VISIBLE
         imageView.setImageResource(R.drawable.ic_status_potentially_hazardous)
+//        Picasso.get().load(R.drawable.ic_status_potentially_hazardous).into(imageView)
     } else {
+        imageView.visibility = View.VISIBLE
         imageView.setImageResource(R.drawable.ic_status_normal)
+//        Picasso.get().load(R.drawable.ic_status_normal).into(imageView)
     }
 }
 
@@ -31,6 +35,7 @@ fun bindDetailsStatusImage(imageView: ImageView, isHazardous: Boolean) {
     } else {
         imageView.setImageResource(R.drawable.asteroid_safe)
     }
+
 }
 
 @BindingAdapter("astronomicalUnitText")

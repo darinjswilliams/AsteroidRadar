@@ -2,7 +2,6 @@ package com.udacity.asteroidradar.api
 
 import com.udacity.asteroidradar.Asteroid
 import com.udacity.asteroidradar.Constants
-import com.udacity.asteroidradar.database.ImageOfToday
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.GET
@@ -27,14 +26,15 @@ interface AsteroidApiService {
      */
 
     @GET(Constants.ASTEROID_FEED)
-    suspend fun getAsteroids(@Query(Constants.START_DATE) startDate: String,
+     suspend fun getAsteroids(@Query(Constants.START_DATE) startDate: String,
                              @Query(Constants.END_DATE) endDate: String,
                              @Query(Constants.API_KEY) apiKey: String) : String
 
-    @GET(Constants.API_KEY)
-    suspend fun getImageOfToday(@Query("filter") type: String) : ImageOfToday
+//    @GET(Constants.API_KEY)
+//    suspend fun getImageOfToday(@Query("filter") type: String) : ImageOfToday
 }
 
+//Expose the Retrofit Service to the rest of the application as AsteroidApid
 object AsteroidApi {
     val retrofitService : AsteroidApiService by lazy { retrofit.create(AsteroidApiService::class.java) }
 }

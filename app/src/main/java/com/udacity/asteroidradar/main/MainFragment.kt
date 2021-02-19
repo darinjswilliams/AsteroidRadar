@@ -18,8 +18,11 @@ class MainFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val binding = FragmentMainBinding.inflate(inflater)
+
+        //Allows Data binding to be Observed LiveData for any changes with the LifeCycle of this Fragment
         binding.lifecycleOwner = this
 
+        //Give binding access to the MainViewModel
         binding.viewModel = viewModel
 
         binding.asteroidRecycler.adapter = MainAsteroidAdapter()
