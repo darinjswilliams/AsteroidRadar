@@ -22,6 +22,7 @@ class MainViewModel : ViewModel() {
 
     private val _asteroidProperties = MutableLiveData<List<Asteroid>>()
     private val _pictureOfToday = MutableLiveData<PictureOfDay>()
+    private val _navigateToSelectedProperty = MutableLiveData<Asteroid>()
 
     val status: LiveData<AsteroidApiStatus>
         get() = _status
@@ -31,6 +32,10 @@ class MainViewModel : ViewModel() {
 
     val pictureOfToday: LiveData<PictureOfDay>
         get() = _pictureOfToday
+
+    val navigateToSelectedProperty: LiveData<Asteroid>
+        get() = _navigateToSelectedProperty
+
 
     init {
         getPictureOfToday()
@@ -93,6 +98,15 @@ class MainViewModel : ViewModel() {
 
         }
 
+    }
+
+    fun displayAsteroidDetails(asteroid: Asteroid) {
+        _navigateToSelectedProperty.value = asteroid
+    }
+
+    //To prevent unwanted navigation extra navigation
+    fun displayAsteroidDetailsCompleted() {
+        _navigateToSelectedProperty.value = null
     }
 
     /**

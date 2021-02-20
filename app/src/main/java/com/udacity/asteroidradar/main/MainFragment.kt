@@ -3,7 +3,9 @@ package com.udacity.asteroidradar.main
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.api.AsteroidFilter
 import com.udacity.asteroidradar.databinding.FragmentMainBinding
@@ -25,7 +27,18 @@ class MainFragment : Fragment() {
         //Give binding access to the MainViewModel
         binding.viewModel = viewModel
 
-        binding.asteroidRecycler.adapter = MainAsteroidAdapter()
+        //This will trigger livedata
+        binding.asteroidRecycler.adapter = MainAsteroidAdapter(MainAsteroidAdapter.OnClickListener{
+            viewModel.displayAsteroidDetails(it)
+        })
+
+        viewModel.navigateToSelectedProperty.observe(viewLifecycleOwner, Observer {
+            if( null != it){
+                Timber.i("Navigate to Detail Screen")
+                this.findNavController().navigate(MainFragmentDirections.actionShowDetail(it))
+                viewModel.displayAsteroidDetailsCompleted()
+            }
+        })
 
         setHasOptionsMenu(true)
         Timber.i("OnCreateView mainFragment")
