@@ -5,6 +5,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import com.udacity.asteroidradar.main.MainAsteroidAdapter
 
 /* When there is no Mars property data (data is null), hide the [RecyclerView], otherwise show it.
@@ -26,6 +27,16 @@ fun bindAsteroidStatusImage(imageView: ImageView, isHazardous: Boolean) {
         imageView.setImageResource(R.drawable.ic_status_normal)
 //        Picasso.get().load(R.drawable.ic_status_normal).into(imageView)
     }
+}
+
+@BindingAdapter("pictureOfDay")
+fun bindPictureOfToday(imageView: ImageView, pictureOfDay: PictureOfDay?){
+
+    when(pictureOfDay?.mediaType){
+        Constants.MEDIA_TYPE -> Picasso.get().load(pictureOfDay.url).into(imageView)
+        else -> Picasso.get().load(R.drawable.asteroid_safe).into(imageView)
+    }
+
 }
 
 @BindingAdapter("asteroidStatusImage")

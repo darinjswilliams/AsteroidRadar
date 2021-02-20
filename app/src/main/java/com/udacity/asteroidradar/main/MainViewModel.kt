@@ -6,11 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.udacity.asteroidradar.Asteroid
 import com.udacity.asteroidradar.Constants
-import com.udacity.asteroidradar.api.AsteroidApi
-import com.udacity.asteroidradar.api.AsteroidFilter
-import com.udacity.asteroidradar.api.getNextSevenDaysFormattedDates
-import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
-import com.udacity.asteroidradar.database.ImageOfToday
+import com.udacity.asteroidradar.PictureOfDay
+import com.udacity.asteroidradar.api.*
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import timber.log.Timber
@@ -24,7 +21,7 @@ class MainViewModel : ViewModel() {
     private val _status = MutableLiveData<AsteroidApiStatus>()
 
     private val _asteroidProperties = MutableLiveData<List<Asteroid>>()
-    private val _imageOfToday = MutableLiveData<ImageOfToday>()
+    private val _pictureOfToday = MutableLiveData<PictureOfDay>()
 
     val status: LiveData<AsteroidApiStatus>
         get() = _status
@@ -32,11 +29,31 @@ class MainViewModel : ViewModel() {
     val asteroidProperties: LiveData<List<Asteroid>>
         get() = _asteroidProperties
 
-    val imageOfToday: LiveData<ImageOfToday>
-        get() = _imageOfToday
+    val pictureOfToday: LiveData<PictureOfDay>
+        get() = _pictureOfToday
 
     init {
+        getPictureOfToday()
         getAsteroidInformation(AsteroidFilter.SHOW_TODAY)
+    }
+
+    private fun getPictureOfToday() {
+        viewModelScope.launch {
+            try {
+                _status.value = AsteroidApiStatus.LOADING
+                Timber.i("Loading Picture of Day ${_status.value}")
+
+                _pictureOfToday.value = PictureApi.pictureService.getImageOfToday(Constants.API_KEY)
+
+                _status.value = AsteroidApiStatus.DONE
+                Timber.i("Loading Picture of Day ${_status.value}")
+
+            } catch (e: Exception) {
+                _status.value = AsteroidApiStatus.ERROR
+                Timber.i("Error Loading Picture of Day ${_status.value}")
+
+            }
+        }
     }
 
     private fun getAsteroidInformation(filter: AsteroidFilter) {

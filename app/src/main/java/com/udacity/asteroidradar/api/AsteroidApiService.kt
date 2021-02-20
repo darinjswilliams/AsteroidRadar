@@ -16,6 +16,7 @@ private val retrofit = Retrofit.Builder()
     .baseUrl(Constants.BASE_URL)
     .build()
 
+
 interface AsteroidApiService {
 
     /**
@@ -30,8 +31,7 @@ interface AsteroidApiService {
                              @Query(Constants.END_DATE) endDate: String,
                              @Query(Constants.API_KEY) apiKey: String) : String
 
-//    @GET(Constants.API_KEY)
-//    suspend fun getImageOfToday(@Query("filter") type: String) : ImageOfToday
+
 }
 
 //Expose the Retrofit Service to the rest of the application as AsteroidApid
