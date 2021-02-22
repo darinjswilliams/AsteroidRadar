@@ -1,7 +1,7 @@
 package com.udacity.asteroidradar.api
 
-import com.udacity.asteroidradar.Asteroid
-import com.udacity.asteroidradar.Constants
+import com.udacity.asteroidradar.domain.Asteroid
+import com.udacity.asteroidradar.utils.Constants
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.GET
@@ -28,8 +28,8 @@ interface AsteroidApiService {
 
     @GET(Constants.ASTEROID_FEED)
      suspend fun getAsteroids(@Query(Constants.START_DATE) startDate: String,
-                             @Query(Constants.END_DATE) endDate: String,
-                             @Query(Constants.API_KEY) apiKey: String) : String
+                              @Query(Constants.END_DATE) endDate: String,
+                              @Query(Constants.API_KEY) apiKey: String) : String
 
 
 }

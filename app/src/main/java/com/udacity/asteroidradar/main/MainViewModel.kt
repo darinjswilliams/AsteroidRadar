@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.udacity.asteroidradar.Asteroid
-import com.udacity.asteroidradar.Constants
-import com.udacity.asteroidradar.PictureOfDay
+import com.udacity.asteroidradar.domain.Asteroid
+import com.udacity.asteroidradar.utils.Constants
+import com.udacity.asteroidradar.domain.PictureOfDay
 import com.udacity.asteroidradar.api.*
 import kotlinx.coroutines.launch
 import org.json.JSONObject
@@ -48,7 +48,9 @@ class MainViewModel : ViewModel() {
                 _status.value = AsteroidApiStatus.LOADING
                 Timber.i("Loading Picture of Day ${_status.value}")
 
-                _pictureOfToday.value = PictureApi.pictureService.getImageOfToday(Constants.API_KEY)
+                _pictureOfToday.value = PictureApi.pictureService.getImageOfToday(Constants.key)
+
+
 
                 _status.value = AsteroidApiStatus.DONE
                 Timber.i("Loading Picture of Day ${_status.value}")
