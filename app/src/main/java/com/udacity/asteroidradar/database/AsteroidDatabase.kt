@@ -3,6 +3,7 @@ package com.udacity.asteroidradar.database
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import com.udacity.asteroidradar.domain.PictureOfDay
 
 
 //Database Access Objects Section
@@ -35,8 +36,8 @@ interface PictureOfDayDao {
     @Query("DELETE FROM picture_of_day_table")
     suspend fun clearPictureOfDay()
 
-    @Query("SELECT * FROM picture_of_day_table WHERE target_date = :targetDate")
-    fun getPictureOfTodayImage(targetDate: String) : LiveData<PictureOfDayEntity>
+    @Query("SELECT * FROM picture_of_day_table ORDER BY media_type DESC LIMIT 1 ")
+    fun getPictureOfToday() : LiveData<PictureOfDay>
 }
 
 //Database Sections

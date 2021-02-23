@@ -31,7 +31,7 @@
                 android:layout_height="match_parent"
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
-                app:pictureOfDay="@{viewModel.pictureOfToday}"
+                app:pictureOfDay="@{viewModel.pictureOfDayList}"
                 app:srcCompat="@drawable/placeholder_picture_of_day" />
 
             <TextView
@@ -59,7 +59,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/activity_main_image_of_the_day_layout"
             app:layout_constraintVertical_bias="0.0"
-            app:listData="@{viewModel.asteroidProperties}"
+            app:listData="@{viewModel.asteroidList}"
             tools:listitem="@layout/asteroid_view_item" />
 
         <ProgressBar

@@ -13,12 +13,26 @@ import timber.log.Timber
 
 class MainFragment : Fragment() {
 
+    /**
+     * One way to delay creation of the viewModel until an appropriate lifecycle method is to use
+     * lazy. This requires that viewModel not be referenced before onViewCreated(), which we
+     * do in this Fragment.
+     */
     private val viewModel: MainViewModel by lazy {
-        ViewModelProvider(this).get(MainViewModel::class.java)
+        val activity = requireNotNull(this.activity) {
+            "You can only access the viewModel after onViewCreated()"
+        }
+        ViewModelProvider(
+            this,
+            MainViewModel.Factory(activity.application)
+        ).get(MainViewModel::class.java)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val binding = FragmentMainBinding.inflate(inflater)
 
         //Allows Data binding to be Observed LiveData for any changes with the LifeCycle of this Fragment
@@ -28,22 +42,27 @@ class MainFragment : Fragment() {
         binding.viewModel = viewModel
 
         //This will trigger livedata
-        binding.asteroidRecycler.adapter = MainAsteroidAdapter(MainAsteroidAdapter.OnClickListener{
+        binding.asteroidRecycler.adapter = MainAsteroidAdapter(MainAsteroidAdapter.OnClickListener {
             viewModel.displayAsteroidDetails(it)
         })
 
-        viewModel.navigateToSelectedProperty.observe(viewLifecycleOwner, Observer {
-            if( null != it){
-                Timber.i("Navigate to Detail Screen")
-                this.findNavController().navigate(MainFragmentDirections.actionShowDetail(it))
-                viewModel.displayAsteroidDetailsCompleted()
-            }
-        })
 
         setHasOptionsMenu(true)
         Timber.i("OnCreateView mainFragment")
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel.navigateToSelectedProperty.observe(viewLifecycleOwner, Observer {
+            if (null != it) {
+                Timber.i("Navigate to Detail Screen")
+                this.findNavController().navigate(MainFragmentDirections.actionShowDetail(it))
+                viewModel.displayAsteroidDetailsCompleted()
+            }
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -53,7 +72,7 @@ class MainFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         viewModel.updateFilter(
-            when(item.itemId){
+            when (item.itemId) {
                 R.id.show_saved_menu -> AsteroidFilter.SHOW_SAVE
                 R.id.show_today_menu -> AsteroidFilter.SHOW_TODAY
                 else -> AsteroidFilter.SHOW_WEEK

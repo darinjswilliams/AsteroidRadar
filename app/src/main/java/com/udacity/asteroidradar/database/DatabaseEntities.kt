@@ -15,10 +15,8 @@ data class PictureOfDayEntity constructor(
     @ColumnInfo(name = "media_type")
     val mediaType: String,
 
-    val title: String,
+    val title: String
 
-    @ColumnInfo(name = "target_date")
-    val dateStamp: String
 )
 
 
@@ -64,13 +62,11 @@ fun List<AsteroidEntity>.asAsteroidDomainModel(): List<Asteroid> {
     }
 }
 
-fun List<PictureOfDayEntity>.asPictureDomainModel() : List<PictureOfDay> {
-    return map {
-        PictureOfDay(
-            mediaType = it.mediaType,
-            title = it.title,
-            url = it.url
+fun  PictureOfDay.asPictureDatabaseModel() : PictureOfDayEntity {
+    return PictureOfDayEntity(
+            mediaType = this.mediaType,
+            title = this.title,
+            url = this.url
         )
 
-    }
 }
