@@ -14,8 +14,11 @@ CONSUMER_KEY=XXXXXXXXXXX  To avoid these keys showing up in your repository, mak
 
 apikey.properties Next, add this section to read from this file in your app/build.gradle file. You'll also create compile-time options that will be generated from this file by using the buildConfigField definition:
 
-def apikeyPropertiesFile = rootProject.file("apikey.properties") def apikeyProperties = new Properties() apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
+- def apikeyPropertiesFile = rootProject.file("apikey.properties") 
+- def apikeyProperties = new Properties() 
+- apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
 
+```
 android {
 
 defaultConfig {
@@ -23,7 +26,10 @@ defaultConfig {
  // should correspond to key/value pairs inside the file   
 buildConfigField("String", "CONSUMER_KEY", apikeyProperties['CONSUMER_KEY'])
 
-} } You can now access these two fields anywhere within your source code with the BuildConfig object provided by Gradle:
+} } You can now access this field anywhere within your source code with the BuildConfig object provided by Gradle:
+```
 
-// inside of any of your application's code String consumerKey = BuildConfig.CONSUMER_KEY; String consumerSecret = BuildConfig.CONSUMER_SECRET;
+
+### inside of your application's code, set up a constant field that can be passed as parameter to your retrofit api
+const val key =  BuildConfig.CONSUMER_KEY
 
