@@ -5,6 +5,7 @@ import androidx.lifecycle.*
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.api.AsteroidFilter
 import com.udacity.asteroidradar.api.getNextSevenDaysFormattedDates
+import com.udacity.asteroidradar.database.AsteroidEntity
 import com.udacity.asteroidradar.database.getDatabase
 import com.udacity.asteroidradar.domain.Asteroid
 import com.udacity.asteroidradar.domain.PictureOfDay
@@ -16,12 +17,16 @@ import timber.log.Timber
 enum class AsteroidApiStatus { LOADING, ERROR, DONE }
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
+    /** External Variables **/
+
     // The internal MutableLiveData that stores the status of the most recent request
-//External Variables
     private val _status = MutableLiveData<AsteroidApiStatus>()
 
     private val _pictureOfToday = MutableLiveData<PictureOfDay>()
+
+    //Navigation, create property an expose it as a MutableLiveData
     private val _navigateToSelectedProperty = MutableLiveData<Asteroid>()
+
 
     val status: LiveData<AsteroidApiStatus>
         get() = _status
@@ -42,7 +47,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     //init is called immediately when this ViewModel is created
     init {
 
-        viewModelScope.launch {
+        retrieveInformation()
+    }
+
+    private fun retrieveInformation() =  viewModelScope.launch {
 
             _status.value = AsteroidApiStatus.LOADING
 
@@ -51,20 +59,22 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
             _status.value = AsteroidApiStatus.DONE
         }
-    }
+
 
     //Get data from repository
     val asteroidList = asteroidRepository.asteroids
-    val pictureOfDayList = asteroidRepository.getPictureOfDay()
+    val pictureOfDayList = asteroidRepository.picOfDay
 
 
     fun displayAsteroidDetails(asteroid: Asteroid) {
         _navigateToSelectedProperty.value = asteroid
     }
 
-    //To prevent unwanted navigation extra navigation
+    //To prevent unwanted navigation
     fun displayAsteroidDetailsCompleted() {
-        _navigateToSelectedProperty.value = null
+        _navigateToSelectedProperty.let{
+            it.value = null
+        }
     }
 
     /**
@@ -73,10 +83,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
      * @param filter the [AsteroidApiFilter] that is sent as part of the web server request
      */
     fun updateFilter(filter: AsteroidFilter) {
-//        getAsteroidInformation(filter)
         Timber.i("Menu item choosen: ${filter}")
         when (filter) {
-            AsteroidFilter.SHOW_TODAY -> asteroidRepository
+            AsteroidFilter.SHOW_TODAY -> retrieveInformation()
             else -> AsteroidFilter.SHOW_WEEK
         }
     }

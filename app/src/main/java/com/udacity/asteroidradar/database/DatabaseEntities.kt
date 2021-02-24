@@ -62,8 +62,8 @@ fun List<AsteroidEntity>.asAsteroidDomainModel(): List<Asteroid> {
     }
 }
 
-fun  PictureOfDay.asPictureDatabaseModel() : PictureOfDayEntity {
-    return PictureOfDayEntity(
+fun  PictureOfDayEntity.asPictureDomainModel() : PictureOfDay {
+    return PictureOfDay(
             mediaType = this.mediaType,
             title = this.title,
             url = this.url

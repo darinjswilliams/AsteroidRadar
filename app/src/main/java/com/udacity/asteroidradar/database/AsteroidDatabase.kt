@@ -37,7 +37,7 @@ interface PictureOfDayDao {
     suspend fun clearPictureOfDay()
 
     @Query("SELECT * FROM picture_of_day_table ORDER BY media_type DESC LIMIT 1 ")
-    fun getPictureOfToday() : LiveData<PictureOfDay>
+    fun getPictureOfToday() : LiveData<PictureOfDayEntity>
 }
 
 //Database Sections

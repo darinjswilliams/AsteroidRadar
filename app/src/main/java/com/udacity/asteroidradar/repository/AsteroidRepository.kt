@@ -6,10 +6,10 @@ import com.udacity.asteroidradar.api.AsteroidApi
 import com.udacity.asteroidradar.api.PictureApi
 import com.udacity.asteroidradar.api.getNextSevenDaysFormattedDates
 import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
-import com.udacity.asteroidradar.database.AsteroidDatabase
-import com.udacity.asteroidradar.database.asAsteroidDomainModel
-import com.udacity.asteroidradar.database.asPictureDatabaseModel
+import com.udacity.asteroidradar.database.*
 import com.udacity.asteroidradar.domain.Asteroid
+import com.udacity.asteroidradar.domain.PictureOfDay
+import com.udacity.asteroidradar.domain.asPictureDatabaseModel
 import com.udacity.asteroidradar.network.NetworkAsteroids
 import com.udacity.asteroidradar.network.asDatabaseModel
 import com.udacity.asteroidradar.utils.Constants
@@ -31,6 +31,11 @@ class AsteroidRepository(private val database: AsteroidDatabase) {
         it.asAsteroidDomainModel()
     }
 
+    val picOfDay: LiveData<PictureOfDay> = Transformations.map(
+        database.pictureOfDayDao.getPictureOfToday()
+    ){
+        it.asPictureDomainModel()
+    }
     //Return Picture of Day
     fun getPictureOfDay() = database.pictureOfDayDao.getPictureOfToday()
 
@@ -78,12 +83,9 @@ class AsteroidRepository(private val database: AsteroidDatabase) {
         withContext(Dispatchers.IO) {
 
             try {
-                val picOfDay = PictureApi.pictureService.getImageOfToday(Constants.key)
+                val picImageOfDay = PictureApi.pictureService.getImageOfToday(Constants.key)
 
-                //clear picture of day
-                database.pictureOfDayDao.clearPictureOfDay()
-
-                picOfDay?.let { database.pictureOfDayDao.insertPicture(it.asPictureDatabaseModel()) }
+                picImageOfDay.let { database.pictureOfDayDao.insertPicture(it.asPictureDatabaseModel()) }
 
                 Timber.i("Insert of picture of day into database")
             } catch (ex: Exception) {
