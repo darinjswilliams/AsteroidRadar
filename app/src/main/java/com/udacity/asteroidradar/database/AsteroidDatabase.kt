@@ -14,7 +14,7 @@ interface AsteroidDao {
     fun insertAsteroid(vararg asteroids: AsteroidEntity)
 
     @Query("SELECT * FROM asteroids_table WHERE close_approach_date =" +
-            " :date ORDER BY close_approach_date DESC")
+            " :date ORDER BY close_approach_date ASC")
     fun getTodayAsteroids(date: String): LiveData<List<AsteroidEntity>>
 
     @Query(

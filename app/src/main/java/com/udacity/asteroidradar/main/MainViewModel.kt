@@ -35,7 +35,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     //Repository
     private val database = getDatabase(application)
     private val asteroidRepository =
-        AsteroidRepository(database, getNextSevenDaysFormattedDates()[0])
+        AsteroidRepository(database)
 
 
     //init is called immediately when this ViewModel is created
@@ -55,7 +55,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     //Get data from repository
     val asteroidList = asteroidRepository.asteroids
     val pictureOfDayList = asteroidRepository.getPictureOfDay()
-    val pictureOfDayTitle = pictureOfDayList.value?.title
+
 
     fun displayAsteroidDetails(asteroid: Asteroid) {
         _navigateToSelectedProperty.value = asteroid

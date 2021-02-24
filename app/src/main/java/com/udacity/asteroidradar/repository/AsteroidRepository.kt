@@ -18,12 +18,15 @@ import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import timber.log.Timber
 
-class AsteroidRepository(private val database: AsteroidDatabase, targetDate: String) {
+class AsteroidRepository(private val database: AsteroidDatabase) {
+
+    //get the next 7 asteroid dates
+    var asteroidDates = getNextSevenDaysFormattedDates()
 
     //convert from one livedata to another livedata
     val asteroids: LiveData<List<Asteroid>> = Transformations.map(
         database.asteroidDao
-            .getTodayAsteroids(targetDate)
+            .getTodayAsteroids(asteroidDates[0])
     ) {
         it.asAsteroidDomainModel()
     }
@@ -36,11 +39,10 @@ class AsteroidRepository(private val database: AsteroidDatabase, targetDate: Str
         withContext(Dispatchers.IO) {
 
             try {
-                val dateArrays = getNextSevenDaysFormattedDates()
 
-                val startDate = dateArrays.get(0)
+                val startDate = asteroidDates.get(0)
 
-                val endDate = dateArrays.get(7)
+                val endDate = asteroidDates.get(7)
 
                 val asteroidResult =
                     AsteroidApi.retrofitService.getAsteroids(startDate, endDate, Constants.key)
@@ -77,6 +79,9 @@ class AsteroidRepository(private val database: AsteroidDatabase, targetDate: Str
 
             try {
                 val picOfDay = PictureApi.pictureService.getImageOfToday(Constants.key)
+
+                //clear picture of day
+                database.pictureOfDayDao.clearPictureOfDay()
 
                 picOfDay?.let { database.pictureOfDayDao.insertPicture(it.asPictureDatabaseModel()) }
 
