@@ -12,7 +12,8 @@ First, create a file apikey.properties in your root directory with the values fo
 
 CONSUMER_KEY=XXXXXXXXXXX  To avoid these keys showing up in your repository, make sure to exclude the file from being checked in by adding to your .gitignore file:
 
-apikey.properties Next, add this section to read from this file in your app/build.gradle file. You'll also create compile-time options that will be generated from this file by using the buildConfigField definition:
+apikey.properties Next, add this section to read from this file in your app/build.gradle file. You'll also create compile-time options that will be generated from this file by 
+using the buildConfigField definition:
 
 - def apikeyPropertiesFile = rootProject.file("apikey.properties") 
 - def apikeyProperties = new Properties() 
@@ -30,6 +31,8 @@ buildConfigField("String", "CONSUMER_KEY", apikeyProperties['CONSUMER_KEY'])
 ```
 
 
-### inside of your application's code, set up a constant field that can be passed as parameter to your retrofit api
-const val key =  BuildConfig.CONSUMER_KEY
+### Setup a Constant
+
+Inside of your application's code, set up a constant field that can be passed as parameter to your retrofit api
+- const val key =  BuildConfig.CONSUMER_KEY
 
