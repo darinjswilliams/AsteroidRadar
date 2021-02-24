@@ -1,22 +1,4 @@
-# Purpose of this Folder
-
-This folder should contain the scaffolded project files to get a student started on their project. This repo will be added to the Classroom for students to use, so please do not have any solutions in this folder.
-
-## Note: Android Kotlin Gradle Update
-Use the updated Gradle version in the `~/gradle/wrapper/gradle-wrapper.properties` file:
-```
-distributionUrl = https\://services.gradle.org/distributions/gradle-6.1.1-all.zip
-```
-## Update Gradle Plugin
-Implementation
-
-Clone Project to local directory: git clone with following command:
-
-git clone https://github.com/darinjswilliams/PopularMovies.git
-
-Open Project with Android Studio
-
-#AsteroidRador - Will Required you to request a Unique Nasa API Key. A key is generated after you register with the https://api.nasa.gov/ site.
+# AsteroidRadar - Will Required you to request a Unique Nasa API Key. A key is generated after you register with the https://api.nasa.gov/ site.
 
 How to user API Key
 
