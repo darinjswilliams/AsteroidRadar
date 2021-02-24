@@ -19,7 +19,7 @@ interface AsteroidDao {
 
     @Query(
         "SELECT * FROM asteroids_table WHERE close_approach_date BETWEEN :startDate " +
-                "AND :endDate ORDER BY close_approach_date DESC"
+                "AND :endDate ORDER BY close_approach_date ASC"
     )
     fun getWeeklyAsteroids(startDate: String, endDate: String): LiveData<List<AsteroidEntity>>
 

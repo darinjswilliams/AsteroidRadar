@@ -1,5 +1,7 @@
 package com.udacity.asteroidradar.utils
 
+import com.udacity.asteroidradar.BuildConfig
+
 object Constants {
 
 
@@ -12,5 +14,5 @@ object Constants {
     const val START_DATE = "start_date"
     const val END_DATE = "end_date"
     const val API_KEY = "api_key"
-    const val key = "YSNSbgnHwJgvZ2uSZixLf1fXI1m8DEd0aTgd4f2i"
+    const val key =  BuildConfig.CONSUMER_KEY
 }

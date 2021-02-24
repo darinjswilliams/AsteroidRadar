@@ -19,15 +19,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 //External Variables
     private val _status = MutableLiveData<AsteroidApiStatus>()
 
-//    private val _asteroidProperties = MutableLiveData<List<Asteroid>>()
     private val _pictureOfToday = MutableLiveData<PictureOfDay>()
     private val _navigateToSelectedProperty = MutableLiveData<Asteroid>()
 
     val status: LiveData<AsteroidApiStatus>
         get() = _status
-//
-//    val asteroidProperties: LiveData<List<Asteroid>>
-//        get() = _asteroidProperties
+
 
     val pictureOfToday: LiveData<PictureOfDay>
         get() = _pictureOfToday
@@ -49,6 +46,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             _status.value = AsteroidApiStatus.LOADING
 
             asteroidRepository.refreshAsteroids()
+            asteroidRepository.refreshPictureOfDay()
 
             _status.value = AsteroidApiStatus.DONE
         }
@@ -57,66 +55,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     //Get data from repository
     val asteroidList = asteroidRepository.asteroids
     val pictureOfDayList = asteroidRepository.getPictureOfDay()
-
-//    private fun getPictureOfToday() {
-//        viewModelScope.launch {
-//            try {
-//                _status.value = AsteroidApiStatus.LOADING
-//                Timber.i("Loading Picture of Day ${_status.value}")
-//
-//                _pictureOfToday.value = PictureApi.pictureService.getImageOfToday(Constants.key)
-//
-//
-//
-//                _status.value = AsteroidApiStatus.DONE
-//                Timber.i("Loading Picture of Day ${_status.value}")
-//
-//            } catch (e: Exception) {
-//                _status.value = AsteroidApiStatus.ERROR
-//                Timber.i("Error Loading Picture of Day ${_status.value}")
-//
-//            }
-//        }
-//    }
-//
-//    private fun getAsteroidInformation(filter: AsteroidFilter) {
-//        viewModelScope.launch {
-//            try {
-//                _status.value = AsteroidApiStatus.LOADING
-//
-//
-//                Timber.i("Display data ${filter}")
-//                val dateArrays = getNextSevenDaysFormattedDates()
-//
-//                val startDate = dateArrays.get(0)
-//
-//                val endDate = dateArrays.get(7)
-//
-//
-//                val jsonResult = AsteroidApi.retrofitService.getAsteroids(
-//                    startDate,
-//                    endDate,
-//                    Constants.key
-//                )
-//
-//                _asteroidProperties.value = parseAsteroidsJsonResult(JSONObject(jsonResult))
-//
-//                _status.value = AsteroidApiStatus.DONE
-//
-//                Timber.i("${_status.value}")
-//            } catch (e: Exception) {
-//                _status.value = AsteroidApiStatus.ERROR
-//
-//                Timber.i("Failed retrieving asteroid data  ")
-//                _asteroidProperties.value = ArrayList()
-//
-//                Timber.i("${_status.value}")
-//            }
-//
-//
-//        }
-//
-//    }
+    val pictureOfDayTitle = pictureOfDayList.value?.title
 
     fun displayAsteroidDetails(asteroid: Asteroid) {
         _navigateToSelectedProperty.value = asteroid
