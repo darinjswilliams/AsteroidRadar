@@ -2,6 +2,7 @@ package com.udacity.asteroidradar.main
 
 import android.app.Application
 import androidx.lifecycle.*
+import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.api.AsteroidFilter
 import com.udacity.asteroidradar.api.getNextSevenDaysFormattedDates
 import com.udacity.asteroidradar.database.getDatabase
@@ -74,6 +75,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun updateFilter(filter: AsteroidFilter) {
 //        getAsteroidInformation(filter)
         Timber.i("Menu item choosen: ${filter}")
+        when (filter) {
+            AsteroidFilter.SHOW_TODAY -> asteroidRepository
+            else -> AsteroidFilter.SHOW_WEEK
+        }
     }
 
     /**
