@@ -6,7 +6,7 @@ How to user API Key
 
 To fetch asteroids and pictures from Nasa, you will use the API from api.nasa.gov. If you don’t already have an account, you will need to create one in order to request an API Key. In your request for a key, fill in the require fields and click generate  Once you submit your request, you should receive your key via email shortly after. In order to request popular movies you will want to request data from the /movie/popular and /movie/top_rated endpoints (documentation). An API Key is required. Once you obtain your key, you append it to your HTTP request as a URL parameter like so: https://api.nasa.gov/neo/rest/v1/feed?start_date=START_DATE&end_date=END_DATE&api_key=[YOUR_API_KEY]. You will need this in subsequent requests.
 
-##Location of Nasa API Key
+## Location of Nasa API Key
 
 First, create a file apikey.properties in your root directory with the values for different secret keys:
 
