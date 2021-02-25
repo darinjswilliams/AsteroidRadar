@@ -14,5 +14,7 @@ object Constants {
     const val START_DATE = "start_date"
     const val END_DATE = "end_date"
     const val API_KEY = "api_key"
+
+    //The Api Key for Nasa is defined in local apikey.properties
     const val key =  BuildConfig.CONSUMER_KEY
 }
