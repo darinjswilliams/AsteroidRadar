@@ -13,7 +13,6 @@ import com.udacity.asteroidradar.domain.PictureOfDay
 import com.udacity.asteroidradar.main.MainAsteroidAdapter
 
 
-
 /* When there is no Mars property data (data is null), hide the [RecyclerView], otherwise show it.
 */
 @BindingAdapter("listData")
@@ -34,14 +33,25 @@ fun bindAsteroidStatusImage(imageView: ImageView, isHazardous: Boolean) {
 }
 
 @BindingAdapter("pictureOfDay")
-fun bindPictureOfToday(imageView: ImageView, pictureOfDay: PictureOfDay?){
+fun bindPictureOfToday(imageView: ImageView, pictureOfDay: PictureOfDay?) {
 
-    when(pictureOfDay?.mediaType){
+    when (pictureOfDay?.mediaType) {
         Constants.MEDIA_TYPE -> Picasso.get().load(pictureOfDay.url).into(imageView)
         else -> Picasso.get().load(R.drawable.asteroid_safe).into(imageView)
     }
 
 }
+
+//Dynamically set contentDescription for image of day
+@BindingAdapter("accessibilityPictureOfTheDay")
+fun ImageView.bindAccessibilityPictureOfTheDay(value: String?) {
+
+    contentDescription = when (value) {
+        null -> context.getString(R.string.this_is_nasa_s_picture_of_day_showing_nothing_yet)
+        else -> context.getString( R.string.nasa_picture_of_day_content_description_format, value)
+    }
+}
+
 
 @BindingAdapter("asteroidStatusImage")
 fun bindDetailsStatusImage(imageView: ImageView, isHazardous: Boolean) {
