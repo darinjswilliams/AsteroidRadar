@@ -20,7 +20,7 @@
         <FrameLayout
             android:id="@+id/activity_main_image_of_the_day_layout"
             android:layout_width="match_parent"
-            android:layout_height="220dp"
+            android:layout_height="@dimen/large_card_height"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -40,11 +40,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:background="#55010613"
-                android:padding="16dp"
+                android:background="@color/picture_of_day_color"
+                android:padding="@dimen/spacing_normal"
                 android:text="@{viewModel.pictureOfDayList.title}"
                 android:textColor="@android:color/white"
-                android:textSize="20sp"
+                android:textSize="@dimen/large_text_size"
                 android:textStyle="bold" />
         </FrameLayout>
 
@@ -52,7 +52,7 @@
             android:id="@+id/asteroid_recycler"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:padding="6dp"
+            android:padding="@dimen/spacing_medium"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:contentDescription="@string/saved_asteroids"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -6,5 +6,6 @@
     <color name="app_background">#010613</color>
     <color name="default_text_color">#FFFFFF</color>
     <color name="text_grey">#D2D2D2</color>
+    <color name="picture_of_day_color">#55010613</color>
     <color name="potentially_hazardous">#FF8282</color>
 </resources>
