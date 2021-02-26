@@ -2,10 +2,7 @@ package com.udacity.asteroidradar.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
-import com.udacity.asteroidradar.api.AsteroidApi
-import com.udacity.asteroidradar.api.PictureApi
-import com.udacity.asteroidradar.api.getNextSevenDaysFormattedDates
-import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
+import com.udacity.asteroidradar.api.*
 import com.udacity.asteroidradar.database.*
 import com.udacity.asteroidradar.domain.Asteroid
 import com.udacity.asteroidradar.domain.PictureOfDay
@@ -93,6 +90,15 @@ class AsteroidRepository(private val database: AsteroidDatabase) {
             }
         }
     }
+
+//    fun getAsteroidByDate(filter: AsteroidFilter){
+//
+//        when (filter) {
+//            AsteroidFilter.SHOW_TODAY -> //TODO GET ASTEROID BY TODAY, CALL getNextSevenDaysFormattedDates() get first value
+//            AsteroidFilter.SHOW_WEEK ->  //TODO GET ASTEROID BY TODAY, CALL getNextSevenDaysFormattedDates() get last date in array value
+//            else -> AsteroidFilter.SHOW_SAVE -> //TODO get ALL asteroid by start and end date
+//        }
+//    }
 }
 
 

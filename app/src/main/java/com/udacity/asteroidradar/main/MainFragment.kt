@@ -47,15 +47,6 @@ class MainFragment : Fragment() {
         })
 
 
-        setHasOptionsMenu(true)
-        Timber.i("OnCreateView mainFragment")
-
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
         viewModel.navigateToSelectedProperty.observe(viewLifecycleOwner, Observer {
             if (null != it) {
                 Timber.i("Navigate to Detail Screen")
@@ -63,7 +54,13 @@ class MainFragment : Fragment() {
                 viewModel.displayAsteroidDetailsCompleted()
             }
         })
+
+        setHasOptionsMenu(true)
+        Timber.i("OnCreateView mainFragment")
+
+        return binding.root
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.main_overflow_menu, menu)
