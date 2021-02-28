@@ -18,7 +18,7 @@ import com.udacity.asteroidradar.main.MainViewModel
 import timber.log.Timber
 
 
-/* When there is no Mars property data (data is null), hide the [RecyclerView], otherwise show it.
+/* When there is no Asteroid property data (data is null), hide the [RecyclerView], otherwise show it.
 */
 @BindingAdapter("listData")
 fun bindRecyclerView(recyclerView: RecyclerView, data: List<Asteroid>?) {

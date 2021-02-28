@@ -2,10 +2,7 @@ package com.udacity.asteroidradar.main
 
 import android.app.Application
 import androidx.lifecycle.*
-import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.api.AsteroidFilter
-import com.udacity.asteroidradar.api.getNextSevenDaysFormattedDates
-import com.udacity.asteroidradar.database.AsteroidEntity
 import com.udacity.asteroidradar.database.getDatabase
 import com.udacity.asteroidradar.domain.Asteroid
 import com.udacity.asteroidradar.domain.PictureOfDay
@@ -24,9 +21,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _pictureOfToday = MutableLiveData<PictureOfDay>()
 
+    private val _asteroids = MutableLiveData<List<Asteroid>>()
+
+
     //Navigation, create property an expose it as a MutableLiveData
     private val _navigateToSelectedProperty = MutableLiveData<Asteroid>()
 
+    val asteroids: LiveData<List<Asteroid>>
+        get() = _asteroids
 
     val status: LiveData<AsteroidApiStatus>
         get() = _status
@@ -46,11 +48,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     //init is called immediately when this ViewModel is created
     init {
-
-        retrieveInformation()
-    }
-
-    private fun retrieveInformation() =  viewModelScope.launch {
+        viewModelScope.launch {
 
             _status.value = AsteroidApiStatus.LOADING
 
@@ -60,9 +58,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             _status.value = AsteroidApiStatus.DONE
         }
 
+    }
+
 
     //Get data from repository
-    var asteroidList = asteroidRepository.asteroids
     val pictureOfDayList = asteroidRepository.picOfDay
 
 
@@ -72,7 +71,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     //To prevent unwanted navigation
     fun displayAsteroidDetailsCompleted() {
-        _navigateToSelectedProperty.let{
+        _navigateToSelectedProperty.let {
             it.value = null
         }
     }
@@ -82,14 +81,20 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
      * by calling [getAsteroidInformation]
      * @param filter the [AsteroidApiFilter] that is sent as part of the web server request
      */
-   fun updateFilter(filter: AsteroidFilter) {
-        _status.value = AsteroidApiStatus.LOADING
+    fun updateFilter(filter: AsteroidFilter) : LiveData<List<Asteroid>>{
 
         Timber.i("Menu item choosen: ${filter}")
-       asteroidList = asteroidRepository.getAsteroidsByDate(filter)
-        Timber.i("Asteroids Return ${asteroidList.value}")
+        return asteroidRepository.getAsteroidsByDate(filter)
 
-        _status.value = AsteroidApiStatus.DONE
+    }
+
+
+    fun getTodaysAsteroidInformation() : LiveData<List<Asteroid>>{
+        return asteroidRepository.asteroids
+    }
+
+    fun setAsteroids(listOfAsteroids: List<Asteroid>){
+        _asteroids.value = listOfAsteroids
     }
 
     /**
