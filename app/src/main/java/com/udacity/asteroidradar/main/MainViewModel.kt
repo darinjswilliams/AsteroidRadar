@@ -25,7 +25,7 @@ import timber.log.Timber
 
 enum class AsteroidApiStatus { LOADING, ERROR, DONE }
 
-@RequiresApi(Build.VERSION_CODES.M)
+//@RequiresApi(Build.VERSION_CODES.M)
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     /** External Variables **/
@@ -61,15 +61,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             asteroidRepository.refreshAsteroids()
             asteroidRepository.refreshPictureOfDay()
 
+            Timber.i("Connected to Internet")
+            _pictureOfToday.value = AsteroidApi.retrofitService.getImageOfToday(Constants.key)
 
-            if (checkForActiveNetworkConnection(application)) {
-                Timber.i("Connected to Internet")
-                _pictureOfToday.value = AsteroidApi.retrofitService.getImageOfToday(Constants.key)
-            } else {
-                //Get Picture from Cache
-                _pictureOfToday.value = asteroidRepository.picOfDay.value
-
-            }
             _status.value = AsteroidApiStatus.DONE
         }
 
@@ -96,15 +90,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         Timber.i("Menu item choosen: ${filter}")
         return asteroidRepository.getAsteroidsByDate(filter)
 
-    }
-
-    private fun checkForActiveNetworkConnection(context: Context): Boolean {
-        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val activeNetwork = cm.getNetworkCapabilities(cm.activeNetwork)
-
-
-        val isConnected: Boolean = activeNetwork?.hasCapability(NET_CAPABILITY_INTERNET) == true
-        return isConnected
     }
 
     /**
