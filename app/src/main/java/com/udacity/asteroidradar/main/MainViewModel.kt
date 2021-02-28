@@ -78,7 +78,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     /**
      * Updates the data set filter for the web services by querying the data with the new filter
-     * by calling [getAsteroidInformation]
+     * by returning the Domain Model for Asteroids
      * @param filter the [AsteroidApiFilter] that is sent as part of the web server request
      */
     fun updateFilter(filter: AsteroidFilter) : LiveData<List<Asteroid>>{
@@ -89,10 +89,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
+    //Returns the initial request for Asteroid Information for Today
     fun getTodaysAsteroidInformation() : LiveData<List<Asteroid>>{
         return asteroidRepository.asteroids
     }
 
+    //Set the internal asteroid information return by the updatefilter
     fun setAsteroids(listOfAsteroids: List<Asteroid>){
         _asteroids.value = listOfAsteroids
     }
