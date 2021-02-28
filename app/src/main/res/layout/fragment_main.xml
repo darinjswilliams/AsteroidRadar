@@ -29,10 +29,10 @@
                 android:id="@+id/activity_main_image_of_the_day"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:accessibilityPictureOfTheDay="@{viewModel.pictureOfToday.title}"
+                app:accessibilityPictureOfTheDay="@{viewModel.picOfDay.title}"
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
-                app:pictureOfDay="@{viewModel.pictureOfToday}"
+                app:pictureOfDay="@{viewModel.picOfDay}"
                 app:srcCompat="@drawable/placeholder_picture_of_day" />
 
             <TextView
@@ -42,7 +42,7 @@
                 android:layout_gravity="bottom"
                 android:background="@color/picture_of_day_color"
                 android:padding="@dimen/spacing_normal"
-                android:text="@{viewModel.pictureOfToday.title}"
+                android:text="@{viewModel.picOfDay.title}"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/large_text_size"
                 android:textStyle="bold" />

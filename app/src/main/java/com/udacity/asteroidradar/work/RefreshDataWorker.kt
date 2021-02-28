@@ -13,17 +13,18 @@ import timber.log.Timber
 class RefreshDataWorker(appContext: Context, params: WorkerParameters) :
     CoroutineWorker(appContext, params) {
 
-    companion object{
+    companion object {
         const val WORK_NAME = "RefreshDataWorker"
     }
+
     override suspend fun doWork(): Result {
         val database = getDatabase(applicationContext)
         val repository = AsteroidRepository(database)
 
         return try {
             Timber.i("Refreshing Asteroid and Picture of day")
-            repository.refreshPictureOfDay()
-            repository.refreshAsteroids()
+            repository.refreshAsteroidsAndPicturesOfTodayCache()
+//            repository.deleteAsteroidAndPictureOfDay()
             Result.success()
         } catch (e: Exception) {
             Result.retry()

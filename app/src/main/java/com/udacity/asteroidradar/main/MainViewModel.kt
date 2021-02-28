@@ -51,6 +51,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         AsteroidRepository(database)
 
     val asteroidList = asteroidRepository.asteroids
+    val picOfDay = asteroidRepository.picOfDay
 
     //init is called immediately when this ViewModel is created
     init {
@@ -58,8 +59,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
             _status.value = AsteroidApiStatus.LOADING
 
-            asteroidRepository.refreshAsteroids()
-            asteroidRepository.refreshPictureOfDay()
+            asteroidRepository.refreshAsteroidsAndPicturesOfTodayCache()
 
             Timber.i("Connected to Internet")
             _pictureOfToday.value = AsteroidApi.retrofitService.getImageOfToday(Constants.key)

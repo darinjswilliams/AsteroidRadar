@@ -54,71 +54,83 @@ class AsteroidRepository(private val database: AsteroidDatabase) {
     val picOfDay: LiveData<PictureOfDay> = Transformations.map(
         database.pictureOfDayDao.getPictureOfToday()
     ) {
-        it.asPictureDomainModel()
+        it?.asPictureDomainModel()
     }
 
-    //Refersh the Offline Cache
-    suspend fun refreshAsteroids() {
-        withContext(Dispatchers.IO) {
 
-            try {
+   suspend fun refreshAsteroidsAndPicturesOfTodayCache(){
+    withContext(Dispatchers.IO)
+    {
+        refreshPictureOfDay()
+        refreshAsteroids()
+    }
+}
 
-                val startDate = ParseDate.getToday()
+//Refersh the Offline Cache
+suspend fun refreshAsteroids() {
 
-                val endDate = ParseDate.getOneWeekAhead()
 
-                val asteroidResult =
-                    AsteroidApi.retrofitService.getAsteroids(startDate, endDate, Constants.key)
+    try {
 
-                val asteroidProperties = parseAsteroidsJsonResult(JSONObject(asteroidResult))
-                val networkAsteroidList = asteroidProperties.map {
-                    NetworkAsteroids(
-                        it.id,
-                        it.codename,
-                        it.closeApproachDate,
-                        it.absoluteMagnitude,
-                        it.estimatedDiameter,
-                        it.relativeVelocity,
-                        it.distanceFromEarth,
-                        it.isPotentiallyHazardous
-                    )
-                }
+        val startDate = ParseDate.getToday()
 
-                database.asteroidDao.insertAsteroid(
-                    *networkAsteroidList.asDatabaseModel().toTypedArray()
-                )
-                Timber.i("Success insertion of Asteroid Data")
+        val endDate = ParseDate.getOneWeekAhead()
 
-            } catch (ex: Exception) {
-                Timber.i("Error on inserting asteroid data ${ex.localizedMessage}")
-            }
+        val asteroidResult =
+            AsteroidApi.retrofitService.getAsteroids(startDate, endDate, Constants.key)
 
+        val asteroidProperties = parseAsteroidsJsonResult(JSONObject(asteroidResult))
+        val networkAsteroidList = asteroidProperties.map {
+            NetworkAsteroids(
+                it.id,
+                it.codename,
+                it.closeApproachDate,
+                it.absoluteMagnitude,
+                it.estimatedDiameter,
+                it.relativeVelocity,
+                it.distanceFromEarth,
+                it.isPotentiallyHazardous
+            )
         }
+
+        database.asteroidDao.insertAsteroid(
+            *networkAsteroidList.asDatabaseModel().toTypedArray()
+        )
+        Timber.i("Success insertion of Asteroid Data")
+
+    } catch (ex: Exception) {
+        Timber.i("Error on inserting asteroid data ${ex.localizedMessage}")
     }
 
 
-    suspend fun refreshPictureOfDay() {
-        withContext(Dispatchers.IO) {
+}
 
-            try {
-                val picImageOfDay = AsteroidApi.retrofitService.getImageOfToday(Constants.key)
 
-                picImageOfDay.let { database.pictureOfDayDao.insertPicture(it.asPictureDatabaseModel()) }
+suspend fun refreshPictureOfDay() {
+        try {
+            val picImageOfDay = AsteroidApi.retrofitService.getImageOfToday(Constants.key)
 
-                Timber.i("Insert of picture of day into database")
-            } catch (ex: Exception) {
-                Timber.i("Error downloading PictureOfDay ${ex.localizedMessage}")
-            }
+            picImageOfDay.let { database.pictureOfDayDao.insertPicture(it.asPictureDatabaseModel()) }
+
+            Timber.i("Insert of picture of day into database")
+        } catch (ex: Exception) {
+            Timber.i("Error downloading PictureOfDay ${ex.localizedMessage}")
         }
+}
+
+fun getAsteroidsByDate(filter: AsteroidFilter) {
+
+    Timber.i("Filter Request was ---> ${filter.value} ")
+    asteroidFilter.value = filter
+
+}
+
+suspend fun deleteAsteroidAndPictureOfDay() {
+    withContext(Dispatchers.IO) {
+        database.asteroidDao.clearAsteroid(ParseDate.getToday())
+        database.pictureOfDayDao.clearPictureOfDay()
     }
-
-    fun getAsteroidsByDate(filter: AsteroidFilter) {
-
-        Timber.i("Filter Request was ---> ${filter.value} ")
-        asteroidFilter.value = filter
-
-
-    }
+}
 
 }
 

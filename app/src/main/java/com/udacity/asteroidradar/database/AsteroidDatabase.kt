@@ -23,8 +23,8 @@ interface AsteroidDao {
     )
     fun getWeeklyAsteroids(startDate: String, endDate: String): LiveData<List<AsteroidEntity>>
 
-    @Query("DELETE FROM asteroids_table")
-    suspend fun clearAsteroid()
+    @Query("DELETE FROM asteroids_table WHERE close_approach_date = :date")
+    suspend fun clearAsteroid(date: String)
 }
 
 @Dao
