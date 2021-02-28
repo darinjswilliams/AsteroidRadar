@@ -29,7 +29,6 @@ class MainFragment : Fragment() {
         ).get(MainViewModel::class.java)
     }
 
-    private val mainAsteroidAdapter: MainAsteroidAdapter? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

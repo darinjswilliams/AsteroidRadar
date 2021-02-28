@@ -119,11 +119,7 @@ class AsteroidRepository(private val database: AsteroidDatabase) {
                     it.asAsteroidDomainModel()
                 }
             }
-
-
-
     }
-
 
 }
 

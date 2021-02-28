@@ -7,6 +7,7 @@ import androidx.databinding.BindingAdapter
 import androidx.lifecycle.ViewModelProvider
 
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.domain.Asteroid
@@ -42,7 +43,9 @@ fun bindAsteroidStatusImage(imageView: ImageView, isHazardous: Boolean) {
 fun bindPictureOfToday(imageView: ImageView, pictureOfDay: PictureOfDay?) {
 
     when (pictureOfDay?.mediaType) {
-        Constants.MEDIA_TYPE -> Picasso.get().load(pictureOfDay.url).fit().centerCrop().into(imageView)
+        Constants.MEDIA_TYPE -> Picasso.get().load(pictureOfDay.url)
+            .placeholder(R.drawable.placeholder_picture_of_day)
+            .error(R.drawable.ic_connection_error).fit().centerCrop().into(imageView)
         else -> Picasso.get().load(R.drawable.asteroid_safe).into(imageView)
     }
 
@@ -54,7 +57,7 @@ fun ImageView.bindAccessibilityPictureOfTheDay(value: String?) {
 
     contentDescription = when (value) {
         null -> context.getString(R.string.this_is_nasa_s_picture_of_day_showing_nothing_yet)
-        else -> context.getString( R.string.nasa_picture_of_day_content_description_format, value)
+        else -> context.getString(R.string.nasa_picture_of_day_content_description_format, value)
     }
 }
 

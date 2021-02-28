@@ -20,5 +20,4 @@ fun PictureOfDay.asPictureDatabaseModel() : PictureOfDayEntity {
         title = this.title,
         url = this.url
     )
-
 }
