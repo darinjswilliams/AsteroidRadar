@@ -2,6 +2,7 @@ package com.udacity.asteroidradar.main
 
 import android.os.Bundle
 import android.view.*
+import android.widget.BaseAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -9,7 +10,10 @@ import androidx.navigation.fragment.findNavController
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.api.AsteroidFilter
 import com.udacity.asteroidradar.databinding.FragmentMainBinding
+import com.udacity.asteroidradar.domain.Asteroid
+import com.udacity.asteroidradar.utils.bindRecyclerView
 import timber.log.Timber
+
 
 class MainFragment : Fragment() {
 
@@ -28,6 +32,7 @@ class MainFragment : Fragment() {
         ).get(MainViewModel::class.java)
     }
 
+    private val mainAsteroidAdapter: MainAsteroidAdapter? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,12 +60,22 @@ class MainFragment : Fragment() {
             }
         })
 
+
         setHasOptionsMenu(true)
         Timber.i("OnCreateView mainFragment")
 
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.asteroidList.observe(viewLifecycleOwner, Observer<List<Asteroid>> { asteroids ->
+            asteroids?.apply {
+                Timber.i("Data Notification Change submitlist")
+                mainAsteroidAdapter?.submitList(asteroids)
+            }
+        })
+    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.main_overflow_menu, menu)

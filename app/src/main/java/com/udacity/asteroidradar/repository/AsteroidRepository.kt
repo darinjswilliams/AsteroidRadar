@@ -30,11 +30,9 @@ class AsteroidRepository(private val database: AsteroidDatabase) {
 
     val picOfDay: LiveData<PictureOfDay> = Transformations.map(
         database.pictureOfDayDao.getPictureOfToday()
-    ){
+    ) {
         it.asPictureDomainModel()
     }
-    //Return Picture of Day
-    fun getPictureOfDay() = database.pictureOfDayDao.getPictureOfToday()
 
     //Refersh the Offline Cache
     suspend fun refreshAsteroids() {
@@ -91,14 +89,42 @@ class AsteroidRepository(private val database: AsteroidDatabase) {
         }
     }
 
-//    fun getAsteroidByDate(filter: AsteroidFilter){
-//
-//        when (filter) {
-//            AsteroidFilter.SHOW_TODAY -> //TODO GET ASTEROID BY TODAY, CALL getNextSevenDaysFormattedDates() get first value
-//            AsteroidFilter.SHOW_WEEK ->  //TODO GET ASTEROID BY TODAY, CALL getNextSevenDaysFormattedDates() get last date in array value
-//            else -> AsteroidFilter.SHOW_SAVE -> //TODO get ALL asteroid by start and end date
-//        }
-//    }
+   fun getAsteroidsByDate(filter: AsteroidFilter) :  LiveData<List<Asteroid>> {
+
+            var starDates = getNextSevenDaysFormattedDates()
+
+
+            Timber.i("Filter Request was ---> ${filter.value} and the dates are ${starDates} ")
+
+
+            return when (filter) {
+                AsteroidFilter.SHOW_TODAY -> Transformations.map(
+                    database.asteroidDao
+                        .getTodayAsteroids(starDates[0])
+                ) {
+                    it.asAsteroidDomainModel()
+                }
+
+                AsteroidFilter.SHOW_WEEK -> Transformations.map(
+                    database.asteroidDao
+                        .getTodayAsteroids(starDates[7])
+                ) {
+                    it.asAsteroidDomainModel()
+                }
+
+                else -> Transformations.map(
+                    database.asteroidDao
+                        .getWeeklyAsteroids(starDates[0], starDates[7])
+                ) {
+                    it.asAsteroidDomainModel()
+                }
+            }
+
+
+
+    }
+
+
 }
 
 

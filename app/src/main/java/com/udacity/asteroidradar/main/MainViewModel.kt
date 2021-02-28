@@ -62,7 +62,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
 
     //Get data from repository
-    val asteroidList = asteroidRepository.asteroids
+    var asteroidList = asteroidRepository.asteroids
     val pictureOfDayList = asteroidRepository.picOfDay
 
 
@@ -82,12 +82,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
      * by calling [getAsteroidInformation]
      * @param filter the [AsteroidApiFilter] that is sent as part of the web server request
      */
-    fun updateFilter(filter: AsteroidFilter) {
+   fun updateFilter(filter: AsteroidFilter) {
+        _status.value = AsteroidApiStatus.LOADING
+
         Timber.i("Menu item choosen: ${filter}")
-        when (filter) {
-            AsteroidFilter.SHOW_TODAY -> retrieveInformation()
-            else -> AsteroidFilter.SHOW_WEEK
-        }
+       asteroidList = asteroidRepository.getAsteroidsByDate(filter)
+        Timber.i("Asteroids Return ${asteroidList.value}")
+
+        _status.value = AsteroidApiStatus.DONE
     }
 
     /**

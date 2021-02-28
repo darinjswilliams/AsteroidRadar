@@ -4,19 +4,25 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import androidx.lifecycle.ViewModelProvider
 
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.domain.Asteroid
 import com.udacity.asteroidradar.domain.PictureOfDay
+import com.udacity.asteroidradar.main.AsteroidApiStatus
 import com.udacity.asteroidradar.main.MainAsteroidAdapter
+import com.udacity.asteroidradar.main.MainFragment
+import com.udacity.asteroidradar.main.MainViewModel
+import timber.log.Timber
 
 
 /* When there is no Mars property data (data is null), hide the [RecyclerView], otherwise show it.
 */
 @BindingAdapter("listData")
 fun bindRecyclerView(recyclerView: RecyclerView, data: List<Asteroid>?) {
+    Timber.i("bindRecyclerViewCalled")
     val adapter = recyclerView.adapter as MainAsteroidAdapter
     adapter.submitList(data)
 }
@@ -36,7 +42,7 @@ fun bindAsteroidStatusImage(imageView: ImageView, isHazardous: Boolean) {
 fun bindPictureOfToday(imageView: ImageView, pictureOfDay: PictureOfDay?) {
 
     when (pictureOfDay?.mediaType) {
-        Constants.MEDIA_TYPE -> Picasso.get().load(pictureOfDay.url).into(imageView)
+        Constants.MEDIA_TYPE -> Picasso.get().load(pictureOfDay.url).fit().centerCrop().into(imageView)
         else -> Picasso.get().load(R.drawable.asteroid_safe).into(imageView)
     }
 
@@ -82,3 +88,9 @@ fun bindTextViewToDisplayVelocity(textView: TextView, number: Double) {
     val context = textView.context
     textView.text = String.format(context.getString(R.string.km_s_unit_format), number)
 }
+
+@BindingAdapter("goneIfNotNull")
+fun goneIfNotNull(view: View, it: Any?) {
+    view.visibility = if (it != null) View.GONE else View.VISIBLE
+}
+

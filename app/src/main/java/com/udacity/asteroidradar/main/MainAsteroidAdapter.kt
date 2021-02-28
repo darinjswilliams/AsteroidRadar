@@ -2,6 +2,7 @@ package com.udacity.asteroidradar.main
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.DiffUtil.ItemCallback
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -43,15 +44,26 @@ class MainAsteroidAdapter(private val onClickListener: OnClickListener) :
         holder.bind(asteroidProperty)
     }
 
-    companion object DiffCallback : ItemCallback<Asteroid>() {
+    companion object DiffCallback : DiffUtil.ItemCallback<Asteroid>() {
         override fun areItemsTheSame(oldItem: Asteroid, newItem: Asteroid): Boolean {
+            Timber.i("AreItemsTheSame: DiffCallBack olditem ${oldItem}")
+            Timber.i("AreItemsTheSame: DiffCallBack newitem ${newItem}")
             return newItem == oldItem
         }
 
         override fun areContentsTheSame(oldItem: Asteroid, newItem: Asteroid): Boolean {
+            Timber.i("AreContentsheSame: DiffCallBack newitem ${newItem.id}")
+            Timber.i("AreContentsTheSame: DiffCallBack olditem ${oldItem.id}")
             return newItem.id == oldItem.id
         }
 
+    }
+
+    override fun onCurrentListChanged(
+        previousList: MutableList<Asteroid>,
+        currentList: MutableList<Asteroid>
+    ) {
+        super.onCurrentListChanged(previousList, currentList)
     }
 
     // Create a name lamda
