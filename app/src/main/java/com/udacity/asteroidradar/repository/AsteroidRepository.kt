@@ -1,6 +1,7 @@
 package com.udacity.asteroidradar.repository
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.udacity.asteroidradar.api.*
 import com.udacity.asteroidradar.database.*
@@ -17,16 +18,38 @@ import timber.log.Timber
 
 class AsteroidRepository(private val database: AsteroidDatabase) {
 
-    //get the next 7 asteroid dates
-    var asteroidDates = getNextSevenDaysFormattedDates()
+    private var asteroidFilter = MutableLiveData(AsteroidFilter.SHOW_TODAY)
 
-    //convert from one livedata to another livedata
-    val asteroids: LiveData<List<Asteroid>> = Transformations.map(
-        database.asteroidDao
-            .getTodayAsteroids(asteroidDates[0])
-    ) {
-        it.asAsteroidDomainModel()
-    }
+    var currentDay = ParseDate.getToday()
+    var endOfWeek = ParseDate.getOneWeekAhead()
+
+    //convert from one livedata to another livedata, Filter data according to menu
+    val asteroids: LiveData<List<Asteroid>> =
+        Transformations.switchMap(asteroidFilter) { menuFilter ->
+            when (menuFilter) {
+                AsteroidFilter.SHOW_TODAY -> Transformations.map(
+                    database.asteroidDao
+                        .getTodayAsteroids(currentDay)
+                ) {
+                    it.asAsteroidDomainModel()
+                }
+
+                AsteroidFilter.SHOW_WEEK -> Transformations.map(
+                    database.asteroidDao
+                        .getTodayAsteroids(endOfWeek)
+                ) {
+                    it.asAsteroidDomainModel()
+                }
+
+                else -> Transformations.map(
+                    database.asteroidDao
+                        .getWeeklyAsteroids(currentDay, endOfWeek)
+                ) {
+                    it.asAsteroidDomainModel()
+                }
+            }
+
+        }
 
     val picOfDay: LiveData<PictureOfDay> = Transformations.map(
         database.pictureOfDayDao.getPictureOfToday()
@@ -40,9 +63,9 @@ class AsteroidRepository(private val database: AsteroidDatabase) {
 
             try {
 
-                val startDate = asteroidDates.get(0)
+                val startDate = ParseDate.getToday()
 
-                val endDate = asteroidDates.get(7)
+                val endDate = ParseDate.getOneWeekAhead()
 
                 val asteroidResult =
                     AsteroidApi.retrofitService.getAsteroids(startDate, endDate, Constants.key)
@@ -89,36 +112,12 @@ class AsteroidRepository(private val database: AsteroidDatabase) {
         }
     }
 
-   fun getAsteroidsByDate(filter: AsteroidFilter) :  LiveData<List<Asteroid>> {
+    fun getAsteroidsByDate(filter: AsteroidFilter) {
 
-            var starDates = getNextSevenDaysFormattedDates()
-
-
-            Timber.i("Filter Request was ---> ${filter.value} and the dates are ${starDates} ")
+        Timber.i("Filter Request was ---> ${filter.value} ")
+        asteroidFilter.value = filter
 
 
-            return when (filter) {
-                AsteroidFilter.SHOW_TODAY -> Transformations.map(
-                    database.asteroidDao
-                        .getTodayAsteroids(starDates[0])
-                ) {
-                    it.asAsteroidDomainModel()
-                }
-
-                AsteroidFilter.SHOW_WEEK -> Transformations.map(
-                    database.asteroidDao
-                        .getTodayAsteroids(starDates[7])
-                ) {
-                    it.asAsteroidDomainModel()
-                }
-
-                else -> Transformations.map(
-                    database.asteroidDao
-                        .getWeeklyAsteroids(starDates[0], starDates[7])
-                ) {
-                    it.asAsteroidDomainModel()
-                }
-            }
     }
 
 }

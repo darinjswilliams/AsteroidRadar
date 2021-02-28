@@ -20,4 +20,6 @@
     <string name="this_is_nasa_s_picture_of_day_showing_nothing_yet">This is NASA\'s picture of day, showing nothing yet</string>
     <string name="nasa_picture_of_day_content_description_format">NASA\'s picture of day: %s</string>
     <string name="asteroidStatus">Asteroid Status</string>
+    <string name="codename">Code Name Of Asteroid</string>
+    <string name="close_approach_date">Close Approach Date</string>
 </resources>

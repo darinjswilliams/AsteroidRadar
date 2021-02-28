@@ -24,29 +24,20 @@ import timber.log.Timber
 
 
 enum class AsteroidApiStatus { LOADING, ERROR, DONE }
+
 @RequiresApi(Build.VERSION_CODES.M)
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     /** External Variables **/
-
-    // The internal MutableLiveData that stores the status of the most recent request
     private val _status = MutableLiveData<AsteroidApiStatus>()
 
     private val _pictureOfToday = MutableLiveData<PictureOfDay>()
 
-    private val _asteroids = MutableLiveData<List<Asteroid>>()
-
-
     //Navigation, create property an expose it as a MutableLiveData
     private val _navigateToSelectedProperty = MutableLiveData<Asteroid>()
 
-
-    val asteroids: LiveData<List<Asteroid>>
-        get() = _asteroids
-
     val status: LiveData<AsteroidApiStatus>
         get() = _status
-
 
     val pictureOfToday: LiveData<PictureOfDay>
         get() = _pictureOfToday
@@ -59,6 +50,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val asteroidRepository =
         AsteroidRepository(database)
 
+    val asteroidList = asteroidRepository.asteroids
 
     //init is called immediately when this ViewModel is created
     init {
@@ -69,28 +61,19 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             asteroidRepository.refreshAsteroids()
             asteroidRepository.refreshPictureOfDay()
 
+
             if (checkForActiveNetworkConnection(application)) {
                 Timber.i("Connected to Internet")
                 _pictureOfToday.value = PictureApi.pictureService.getImageOfToday(Constants.key)
             } else {
                 //Get Picture from Cache
-
                 _pictureOfToday.value = asteroidRepository.picOfDay.value
 
-
-
             }
-
-
             _status.value = AsteroidApiStatus.DONE
         }
 
     }
-
-
-    //Get data from repository
-    val pictureOfDayList = asteroidRepository.picOfDay
-
 
     fun displayAsteroidDetails(asteroid: Asteroid) {
         _navigateToSelectedProperty.value = asteroid
@@ -108,26 +91,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
      * by returning the Domain Model for Asteroids
      * @param filter the [AsteroidApiFilter] that is sent as part of the web server request
      */
-    fun updateFilter(filter: AsteroidFilter): LiveData<List<Asteroid>> {
+    fun updateFilter(filter: AsteroidFilter) {
 
         Timber.i("Menu item choosen: ${filter}")
         return asteroidRepository.getAsteroidsByDate(filter)
 
     }
 
-
-    //Returns the initial request for Asteroid Information for Today
-    fun getTodaysAsteroidInformation(): LiveData<List<Asteroid>> {
-        return asteroidRepository.asteroids
-    }
-
-    //Set the internal asteroid information return by the updatefilter
-    fun setAsteroids(listOfAsteroids: List<Asteroid>) {
-        _asteroids.value = listOfAsteroids
-    }
-
-
-    private fun checkForActiveNetworkConnection(context: Context) : Boolean {
+    private fun checkForActiveNetworkConnection(context: Context): Boolean {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val activeNetwork = cm.getNetworkCapabilities(cm.activeNetwork)
 

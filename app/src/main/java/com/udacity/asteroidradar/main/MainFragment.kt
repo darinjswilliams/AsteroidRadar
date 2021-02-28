@@ -57,12 +57,6 @@ class MainFragment : Fragment() {
         })
 
 
-        viewModel.getTodaysAsteroidInformation().observe(viewLifecycleOwner, Observer { asteroids ->
-            asteroids?.apply {
-                viewModel.setAsteroids(this)
-            }
-        })
-
         setHasOptionsMenu(true)
         Timber.i("OnCreateView mainFragment")
 
@@ -76,18 +70,13 @@ class MainFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        viewModel.updateFilter(
-            when (item.itemId) {
-                R.id.show_saved_menu -> AsteroidFilter.SHOW_SAVE
-                R.id.show_today_menu -> AsteroidFilter.SHOW_TODAY
-                else -> AsteroidFilter.SHOW_WEEK
-            }
-        ).observe(
-            viewLifecycleOwner, Observer {
 
-                viewModel.setAsteroids(it)
+            when (item.itemId) {
+                R.id.show_saved_menu -> viewModel.updateFilter(AsteroidFilter.SHOW_SAVE)
+                R.id.show_today_menu -> viewModel.updateFilter(AsteroidFilter.SHOW_TODAY)
+                else -> viewModel.updateFilter(AsteroidFilter.SHOW_WEEK)
             }
-        )
+
         return true
     }
 }
