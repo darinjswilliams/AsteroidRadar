@@ -10,8 +10,8 @@ import android.view.animation.Transformation
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.*
+import com.udacity.asteroidradar.api.AsteroidApi
 import com.udacity.asteroidradar.api.AsteroidFilter
-import com.udacity.asteroidradar.api.PictureApi
 import com.udacity.asteroidradar.database.PictureOfDayEntity
 import com.udacity.asteroidradar.database.getDatabase
 import com.udacity.asteroidradar.domain.Asteroid
@@ -64,7 +64,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
             if (checkForActiveNetworkConnection(application)) {
                 Timber.i("Connected to Internet")
-                _pictureOfToday.value = PictureApi.pictureService.getImageOfToday(Constants.key)
+                _pictureOfToday.value = AsteroidApi.retrofitService.getImageOfToday(Constants.key)
             } else {
                 //Get Picture from Cache
                 _pictureOfToday.value = asteroidRepository.picOfDay.value

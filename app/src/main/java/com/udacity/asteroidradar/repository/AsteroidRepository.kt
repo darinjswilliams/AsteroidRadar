@@ -101,7 +101,7 @@ class AsteroidRepository(private val database: AsteroidDatabase) {
         withContext(Dispatchers.IO) {
 
             try {
-                val picImageOfDay = PictureApi.pictureService.getImageOfToday(Constants.key)
+                val picImageOfDay = AsteroidApi.retrofitService.getImageOfToday(Constants.key)
 
                 picImageOfDay.let { database.pictureOfDayDao.insertPicture(it.asPictureDatabaseModel()) }
 
