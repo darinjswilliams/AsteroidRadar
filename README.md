@@ -21,11 +21,12 @@ The resulting output of the project will be two screens: a Main screen with a li
 - Lifecycle - ( lifecycle-viewmodel, lifecycle-livedata)
  
 ## Design Pattern
-- MVVM pattern implemented very well.
+- MVVM pattern implemented.
 - DataBinding used appropriately with correctly implemented Binding adapters.
 - Room implemented successfully utilizing coroutines support.
-- Extra work has been done implementing AndroidJet Pack .
+- Extra work has been done implementing AndroidJet Pack.
 - Kotlin coroutines and consuming APIs.
+- WorkManager use to refresh offline cache once a day when Mobile device is charging, or Idle.
 
 ## Screenshots
 ![Screenshot1](screenshots/screen_1.png)
