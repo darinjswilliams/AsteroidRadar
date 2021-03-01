@@ -18,7 +18,7 @@ The resulting output of the project will be two screens: a Main screen with a li
 - Moshi
 - WorkManager
 - Recyclerview - Has been refactor to use ListAdapter
-- Lifecycle - ( lifecycle-vewmodel, lefecycle-livedata)
+- Lifecycle - ( lifecycle-viewmodel, lifecycle-livedata)
  
 
 
