@@ -20,7 +20,12 @@ The resulting output of the project will be two screens: a Main screen with a li
 - Recyclerview - Has been refactor to use ListAdapter
 - Lifecycle - ( lifecycle-viewmodel, lifecycle-livedata)
  
-
+## Design Pattern
+- MVVM pattern implemented very well.
+- DataBinding used appropriately with correctly implemented Binding adapters.
+- Room implemented successfully utilizing coroutines support.
+- Extra work has been done implementing AndroidJet Pack .
+- Kotlin coroutines and consuming APIs.
 
 ## Screenshots
 ![Screenshot1](screenshots/screen_1.png)
